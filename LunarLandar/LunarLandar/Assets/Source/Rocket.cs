@@ -2,114 +2,121 @@
 using System.Collections;
 
 public class Rocket : MonoBehaviour {
-	public GameObject rocket;
-	public GameObject propulsion;
-	//public GameObject explosion;
-	public Vector2 position;
-	public float horizontalSpeed;		// 水平
-	public float verticalSpeed;			// 垂直
-	public float rotate;
-	public int fuel;
-	public bool propulsionFlag;
+	public GameObject m_rocket;			// ロケット.
+	public GameObject m_propulsion;		// 推進装置の炎.
+	public GameObject m_explosion;		// 爆発.
+	public Vector2 m_position;			// 座標.
+	public float m_horizontalSpeed;		// 水平.
+	public float m_verticalSpeed;		// 垂直.
+	public float m_rotate;				// 回転.
+	public int m_fuel;					// 燃料.
+	public bool m_propulsionFlag;		// 推進装置使用中.
+	public bool m_landing;				// 着地成功.
+	public bool m_forcedLanding;		// 着地失敗.
 
-	// 後に押したキーを優先させる時に使う
-	bool downKeyLeft;
-	bool downKeyRight;
+	// 後に押したキーを優先させる時に使う.
+	public bool m_downKeyLeft;
+	public bool m_downKeyRight;
 
 	// Use this for initialization
 	void Start () {
-		position.x = -4.0f;
-		position.y = 0.0f;
-		horizontalSpeed = -400.0f;
-		verticalSpeed = 0.0f;
-		rotate = 0.0f;
-		rocket.transform.Rotate (new Vector3 (0, 0, 1) * 90);
-		fuel = 1000;
-		downKeyLeft = false;
-		downKeyRight = false;
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (fuel > 0) {
-			if (Input.GetKey (KeyCode.DownArrow)) {
-				PropulsionSystem ();
-			}
-			else {
-				if(propulsionFlag) {
-					propulsion.transform.position = new Vector2(1000, 1000);
-				}
-				propulsionFlag = false;
-			}
 
-			if (Input.GetKeyDown (KeyCode.LeftArrow) || downKeyLeft) {
-				rotate = 1.0f;
-				downKeyLeft = true;
-				downKeyRight = false;
-			}
-			if (Input.GetKeyUp (KeyCode.LeftArrow)) {
-				downKeyLeft = false;
-			}
-			if (Input.GetKeyDown (KeyCode.RightArrow) || downKeyRight) {
-				rotate = -1.0f;
-				downKeyLeft = false;
-				downKeyRight = true;
-			}
-			if (Input.GetKeyUp (KeyCode.RightArrow)) {
-				downKeyRight = false;
-			}
+	}
+
+	// 推進装置.
+	public void PropulsionSystem () {
+		m_horizontalSpeed -= m_rocket.transform.up.x * 3;
+		m_verticalSpeed -= m_rocket.transform.up.y * 3;
+		// 燃料消費.
+		if (m_fuel > 0) {
+			m_fuel -= 1;
+		}
+		m_propulsionFlag = true;
+	}
+
+	// 回転.
+	public void Rotate () {
+		m_rocket.transform.Rotate (new Vector3 (0, 0, 1) * m_rotate);
+		m_rotate = 0.0f;
+	}
+
+	// 垂直にする.
+	public void Vertical () {
+		m_rocket.transform.up = new Vector2 (0, 1);
+	}
+
+	// 着地失敗かどうか.
+	void OnTriggerEnter2D (Collider2D collider) {
+		if (collider.CompareTag ("Moon")) {
+			m_forcedLanding = true;
+		}
+	}
+
+	// ロケット更新.
+	public void UpdateRocket () {
+		// 回転更新
+		Rotate ();
+
+		// 座標更新.
+		m_verticalSpeed += 1f;
+		m_position.x -= m_horizontalSpeed * 0.00003f;
+		m_position.y -= m_verticalSpeed * 0.00003f;
+		m_rocket.transform.position = m_position;
+
+		if (m_propulsionFlag) {
+			// 推進装置の炎.
+			m_propulsion.transform.position = m_rocket.transform.position;
+			m_propulsion.transform.rotation = m_rocket.transform.rotation;
+		}
+	}
+
+	// 操作関係.
+	public void OperationRocket () {
+		if (Input.GetKey (KeyCode.DownArrow)) {
+			// 推進装置.
+			PropulsionSystem ();
 		}
 		else {
-			if(propulsionFlag) {
-				propulsion.transform.position = new Vector2(1000, 1000);
+			if(m_propulsionFlag) {
+				// 推進装置の炎を消す.
+				m_propulsion.transform.position = new Vector2(1000, 1000);
 			}
-			propulsionFlag = false;
+			m_propulsionFlag = false;
+		}
+		
+		// 左回転.
+		if (Input.GetKeyDown (KeyCode.LeftArrow) || m_downKeyLeft) {
+			m_rotate = 1.0f;
+			m_downKeyLeft = true;
+			m_downKeyRight = false;
+		}
+		if (Input.GetKeyUp (KeyCode.LeftArrow)) {
+			m_downKeyLeft = false;
+		}
+		
+		// 右回転.
+		if (Input.GetKeyDown (KeyCode.RightArrow) || m_downKeyRight) {
+			m_rotate = -1.0f;
+			m_downKeyLeft = false;
+			m_downKeyRight = true;
+		}
+		if (Input.GetKeyUp (KeyCode.RightArrow)) {
+			m_downKeyRight = false;
 		}
 
+		// 着地場所と垂直に.
 		if(Input.GetKeyDown (KeyCode.UpArrow)) {
 			Vertical ();
 		}
-
-		Rotate ();
-
-		verticalSpeed += 1f;
-		position.x -= horizontalSpeed * 0.00003f;
-		position.y -= verticalSpeed * 0.00003f;
-		rocket.transform.position = position;
-		if (propulsionFlag) {
-			propulsion.transform.position = rocket.transform.position;
-			propulsion.transform.rotation = rocket.transform.rotation;
-		}
 	}
-
-	// 推進装置
-	void PropulsionSystem () {
-		horizontalSpeed -= rocket.transform.up.x * 3;
-		verticalSpeed -= rocket.transform.up.y * 3;
-		if (fuel > 0) {
-			fuel -= 1;
-		}
-		propulsionFlag = true;
+	
+	// 爆発.
+	public void Explosion () {
+		Instantiate (m_explosion, m_rocket.transform.position, Quaternion.identity);
 	}
-
-	// 回転
-	void Rotate () {
-		rocket.transform.Rotate (new Vector3 (0, 0, 1) * rotate);
-		rotate = 0.0f;
-	}
-
-	// 垂直にする
-	void Vertical () {
-		rocket.transform.up = new Vector2 (0, 1);
-	}
-
-	// 着地失敗
-	void OnTriggerEnter2D (Collider2D collider) {
-		Destroy (rocket);
-	}
-
-	// 爆発
-	/*void Explosion () {
-		Instantiate (explosion, transform.position, transform.rotation);
-	}*/
 }
