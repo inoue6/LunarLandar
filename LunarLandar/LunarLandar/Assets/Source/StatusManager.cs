@@ -2,16 +2,24 @@
 using System.Collections;
 
 public class StatusManager : MonoBehaviour {
+	// 現在の状態.
 	enum eStatus {
 		eTutorial,
 		ePlay,
 		eGameOver,
 		eGameClear,
 	};
-
-	public GameObject description;
+	
 	eStatus m_status;
+	public GameObject cDescription1;
+	public GameObject cDescription2;
 	public Rocket cRocket;
+	public Text cHorizonSpeedText;
+	public Text cVerticalSpeedText;
+	public Text cFuelText;
+	public Text cGameClearText;
+
+	public int m_enterCount;
 
 	// Use this for initialization
 	void Start () {
@@ -59,30 +67,32 @@ public class StatusManager : MonoBehaviour {
 
 	// チュートリアルのスタート.
 	void StartTutorial () {
-
+		m_enterCount = 0;
 	}
 
 	// チュートリアルのアップデート.
 	void UpdateTutorial () {
 		if (Input.GetKeyDown (KeyCode.Return)) {
-			Transit (eStatus.ePlay);
-			description.transform.position = new Vector2 (1000, 1000);
+			m_enterCount++;
+			switch (m_enterCount) {
+			case 1:
+				cDescription1.transform.position = new Vector2 (1000, 1000);
+				break;
+			case 2:
+				cDescription2.transform.position = new Vector2 (1000, 1000);
+				Transit (eStatus.ePlay);
+				break;
+			}
 		}
 	}
 
 	// ゲームのスタート.
 	void StartPlay () {
-		cRocket.m_position.x = -4.0f;
-		cRocket.m_position.y = 0.0f;
-		cRocket.m_horizontalSpeed = -400.0f;
-		cRocket.m_verticalSpeed = 0.0f;
-		cRocket.m_rotate = 0.0f;
-		cRocket.m_rocket.transform.Rotate (new Vector3 (0, 0, 1) * 90);
-		cRocket.m_fuel = 1000;
-		cRocket.m_downKeyLeft = false;
-		cRocket.m_downKeyRight = false;
-		cRocket.m_landing = false;
-		cRocket.m_forcedLanding = false;
+		cRocket.Initialize ();
+
+		cHorizonSpeedText.SetPosition ();
+		cVerticalSpeedText.SetPosition ();
+		cFuelText.SetPosition ();
 	}
 
 	// ゲームのアップデート.
@@ -103,7 +113,7 @@ public class StatusManager : MonoBehaviour {
 		cRocket.UpdateRocket ();
 
 		// 着地成功.
-		if (cRocket.m_landing) {
+		if (cRocket.m_landing && cRocket.CheckClear ()) {
 			Transit (eStatus.eGameClear);
 		}
 		// 着地失敗.
@@ -114,8 +124,8 @@ public class StatusManager : MonoBehaviour {
 
 	// ゲームクリアのスタート.
 	void StartGameClear () {
-		Debug.Log("Landing");
 		Destroy (cRocket.m_propulsion);
+		cGameClearText.SetPosition ();
 	}
 
 	// ゲームクリアのアップデート.
@@ -125,7 +135,6 @@ public class StatusManager : MonoBehaviour {
 
 	// ゲームオーバーのスタート.
 	void StartGameOver () {
-		Debug.Log (Screen.width);
 		cRocket.Explosion ();
 		Destroy (cRocket.m_rocket);
 		Destroy (cRocket.m_propulsion);
@@ -133,6 +142,8 @@ public class StatusManager : MonoBehaviour {
 
 	// ゲームオーバーのアップデート.
 	void UpdateGameOver () {
-
+		if (Input.GetKeyDown (KeyCode.Return)) {
+			// シーン遷移.
+		}
 	}
 }
