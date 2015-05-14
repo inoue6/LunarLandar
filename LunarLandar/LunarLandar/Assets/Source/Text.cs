@@ -48,7 +48,7 @@ public class Text : MonoBehaviour {
 			cText.text = "Fuel：" + cRocket.m_fuel.ToString ();
 			break;
 		case TextType.eGameClear:
-			cText.text = "GAME CLEAR";
+			cText.text = "STAGE CLEAR";
 			break;
 		case TextType.eGameOver:
 			cText.text = "GAME OVER";
@@ -75,6 +75,11 @@ public class Text : MonoBehaviour {
 			transform.position = new Vector2 (0.28f, 0.6f);
 			break;
 		}
+	}
+
+	// 非表示.
+	public void HideText () {
+		transform.position = new Vector2 (1000, 1000);
 	}
 
 	// スピードの符号を反転して表示.

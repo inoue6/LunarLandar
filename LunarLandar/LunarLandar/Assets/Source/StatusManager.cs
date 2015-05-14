@@ -7,7 +7,7 @@ public class StatusManager : MonoBehaviour {
 		eTutorial,
 		ePlay,
 		eGameOver,
-		eGameClear,
+		eStageClear,
 	};
 	
 	eStatus m_status;
@@ -17,7 +17,7 @@ public class StatusManager : MonoBehaviour {
 	public Text cHorizonSpeedText;
 	public Text cVerticalSpeedText;
 	public Text cFuelText;
-	public Text cGameClearText;
+	public Text cStageClearText;
 
 	public int m_enterCount;
 
@@ -36,8 +36,8 @@ public class StatusManager : MonoBehaviour {
 		case eStatus.ePlay:
 			UpdatePlay ();
 			break;
-		case eStatus.eGameClear:
-			UpdateGameClear ();
+		case eStatus.eStageClear:
+			UpdateStageClear ();
 			break;
 		case eStatus.eGameOver:
 			UpdateGameOver ();
@@ -54,8 +54,8 @@ public class StatusManager : MonoBehaviour {
 		case eStatus.ePlay:
 			StartPlay ();
 			break;
-		case eStatus.eGameClear:
-			StartGameClear ();
+		case eStatus.eStageClear:
+			StartStageClear ();
 			break;
 		case eStatus.eGameOver:
 			StartGameOver ();
@@ -114,7 +114,7 @@ public class StatusManager : MonoBehaviour {
 
 		// 着地成功.
 		if (cRocket.m_landing && cRocket.CheckClear ()) {
-			Transit (eStatus.eGameClear);
+			Transit (eStatus.eStageClear);
 		}
 		// 着地失敗.
 		if (cRocket.m_forcedLanding) {
@@ -122,15 +122,21 @@ public class StatusManager : MonoBehaviour {
 		}
 	}
 
-	// ゲームクリアのスタート.
-	void StartGameClear () {
-		Destroy (cRocket.m_propulsion);
-		cGameClearText.SetPosition ();
+	// ステージクリアのスタート.
+	void StartStageClear () {
+		cRocket.m_propulsion.transform.position = new Vector2 (1000, 1000);
+		cStageClearText.SetPosition ();
 	}
 
-	// ゲームクリアのアップデート.
-	void UpdateGameClear () {
+	// ステージクリアのアップデート.
+	void UpdateStageClear () {
+		if (Input.GetKeyDown (KeyCode.Return)) {
+			// ステージ切り替え.
+			cStageClearText.HideText ();
+			cRocket.NextStageInitialize ();
 
+			Transit (eStatus.ePlay);
+		}
 	}
 
 	// ゲームオーバーのスタート.
@@ -144,6 +150,7 @@ public class StatusManager : MonoBehaviour {
 	void UpdateGameOver () {
 		if (Input.GetKeyDown (KeyCode.Return)) {
 			// シーン遷移.
+			SceneTransition.GetInstance ().TransScene (SceneTransition.eScene.eTitle);
 		}
 	}
 }

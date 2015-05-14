@@ -35,13 +35,28 @@ public class Rocket : MonoBehaviour {
 		m_horizontalSpeed = -400.0f;
 		m_verticalSpeed = 0.0f;
 		m_rotate = 0.0f;
-		m_rocket.transform.Rotate (new Vector3 (0, 0, 1) * 90);
-		m_fuel = 1000;
+		//m_rocket.transform.Rotate (new Vector3 (0, 0, 1) * 90);
+		//m_fuel = 1000;
 		m_downKeyLeft = false;
 		m_downKeyRight = false;
 		m_landing = false;
 		m_forcedLanding = false;
 
+		m_rocket.transform.position = m_position;
+	}
+
+	public void NextStageInitialize () {
+		transform.up = new Vector2 (-1, 0);
+		m_position.x = -4.0f;
+		m_position.y = 0.0f;
+		m_horizontalSpeed = -400.0f;
+		m_verticalSpeed = 0.0f;
+		m_rotate = 0.0f;
+		m_downKeyLeft = false;
+		m_downKeyRight = false;
+		m_landing = false;
+		m_forcedLanding = false;
+		
 		m_rocket.transform.position = m_position;
 	}
 
