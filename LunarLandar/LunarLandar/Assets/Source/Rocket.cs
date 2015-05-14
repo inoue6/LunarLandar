@@ -41,6 +41,8 @@ public class Rocket : MonoBehaviour {
 		m_downKeyRight = false;
 		m_landing = false;
 		m_forcedLanding = false;
+
+		m_rocket.transform.position = m_position;
 	}
 
 	// 推進装置.
@@ -74,8 +76,8 @@ public class Rocket : MonoBehaviour {
 		return false;
 	}
 
-	// 着地失敗かどうか.
 	void OnTriggerEnter2D (Collider2D collider) {
+		// 着地失敗かどうか.
 		if (collider.CompareTag ("Moon")) {
 			m_forcedLanding = true;
 		}
