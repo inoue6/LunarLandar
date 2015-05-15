@@ -35,8 +35,8 @@ public class Rocket : MonoBehaviour {
 		m_horizontalSpeed = -400.0f;
 		m_verticalSpeed = 0.0f;
 		m_rotate = 0.0f;
-		//m_rocket.transform.Rotate (new Vector3 (0, 0, 1) * 90);
-		//m_fuel = 1000;
+		m_rocket.transform.Rotate (new Vector3 (0, 0, 1) * 90);
+		m_fuel = 1000;
 		m_downKeyLeft = false;
 		m_downKeyRight = false;
 		m_landing = false;
@@ -52,6 +52,7 @@ public class Rocket : MonoBehaviour {
 		m_horizontalSpeed = -400.0f;
 		m_verticalSpeed = 0.0f;
 		m_rotate = 0.0f;
+		m_fuel += 400;
 		m_downKeyLeft = false;
 		m_downKeyRight = false;
 		m_landing = false;
@@ -85,7 +86,8 @@ public class Rocket : MonoBehaviour {
 	// 着地成功条件チェック.
 	public bool CheckClear () {
 		if (((int)m_horizontalSpeed >= -100 && (int)m_horizontalSpeed <= 100) &&
-			((int)m_verticalSpeed >= -100 && (int)m_verticalSpeed <= 100)) {
+			((int)m_verticalSpeed >= -100 && (int)m_verticalSpeed <= 100) && 
+		    (transform.up.x == 0 && transform.up.y == 1)) {
 			return true;
 		}
 		return false;
@@ -105,8 +107,8 @@ public class Rocket : MonoBehaviour {
 
 		// 座標更新.
 		m_verticalSpeed += 1f;
-		m_position.x -= Mathf.FloorToInt(m_horizontalSpeed) * 0.00003f;
-		m_position.y -= Mathf.FloorToInt(m_verticalSpeed) * 0.00003f;
+		m_position.x -= Mathf.FloorToInt(m_horizontalSpeed) * 0.00004f;
+		m_position.y -= Mathf.FloorToInt(m_verticalSpeed) * 0.00004f;
 		m_rocket.transform.position = m_position;
 
 		if (m_propulsionFlag) {

@@ -11,15 +11,17 @@ public class StatusManager : MonoBehaviour {
 	};
 	
 	eStatus m_status;
-	public GameObject cDescription1;
-	public GameObject cDescription2;
-	public Rocket cRocket;
-	public Text cHorizonSpeedText;
-	public Text cVerticalSpeedText;
-	public Text cFuelText;
-	public Text cStageClearText;
-
+	public GameObject m_description1;
+	public GameObject m_description2;
+	public Rocket m_rocket;
+	public CameraControl m_camera;
+	public Text m_horizonSpeedText;
+	public Text m_verticalSpeedText;
+	public Text m_fuelText;
+	public Text m_stageClearText;
 	public int m_enterCount;
+	float m_time;
+	bool m_firstClick;
 
 	// Use this for initialization
 	void Start () {
@@ -76,10 +78,10 @@ public class StatusManager : MonoBehaviour {
 			m_enterCount++;
 			switch (m_enterCount) {
 			case 1:
-				cDescription1.transform.position = new Vector2 (1000, 1000);
+				m_description1.transform.position = new Vector2 (1000, 1000);
 				break;
 			case 2:
-				cDescription2.transform.position = new Vector2 (1000, 1000);
+				m_description2.transform.position = new Vector2 (1000, 1000);
 				Transit (eStatus.ePlay);
 				break;
 			}
@@ -88,67 +90,83 @@ public class StatusManager : MonoBehaviour {
 
 	// ゲームのスタート.
 	void StartPlay () {
-		cRocket.Initialize ();
+		m_rocket.Initialize ();
 
-		cHorizonSpeedText.SetPosition ();
-		cVerticalSpeedText.SetPosition ();
-		cFuelText.SetPosition ();
+		m_horizonSpeedText.SetPosition ();
+		m_verticalSpeedText.SetPosition ();
+		m_fuelText.SetPosition ();
+		m_time = 0;
 	}
 
 	// ゲームのアップデート.
 	void UpdatePlay () {
-		if (cRocket.m_fuel > 0) {
+		if (m_time < 0.1f) {
+			m_time += Time.deltaTime;
+			return;
+		}
+
+		if (m_rocket.m_fuel > 0) {
 			// ロケット操作.
-			cRocket.OperationRocket ();
+			m_rocket.OperationRocket ();
 		}
 		else {
 			// 燃料がなくなったら動けない.
-			if(cRocket.m_propulsionFlag) {
-				cRocket.m_propulsion.transform.position = new Vector2(1000, 1000);
+			if(m_rocket.m_propulsionFlag) {
+				m_rocket.m_propulsion.transform.position = new Vector2(1000, 1000);
 			}
-			cRocket.m_propulsionFlag = false;
+			m_rocket.m_propulsionFlag = false;
 		}
 
 		//ロケット更新.
-		cRocket.UpdateRocket ();
+		m_rocket.UpdateRocket ();
 
-		// 着地成功.
-		if (cRocket.m_landing && cRocket.CheckClear ()) {
-			Transit (eStatus.eStageClear);
+		if (m_rocket.m_landing) {
+			if(m_rocket.CheckClear ()) {
+				// 着地成功.
+				Transit (eStatus.eStageClear);
+			}
+			else {
+				// 着地失敗.
+				Transit (eStatus.eGameOver);
+			}
 		}
-		// 着地失敗.
-		if (cRocket.m_forcedLanding) {
+		if (m_rocket.m_forcedLanding) {
+			// 着地失敗.
 			Transit (eStatus.eGameOver);
 		}
 	}
 
 	// ステージクリアのスタート.
 	void StartStageClear () {
-		cRocket.m_propulsion.transform.position = new Vector2 (1000, 1000);
-		cStageClearText.SetPosition ();
+		m_rocket.m_propulsion.transform.position = new Vector2 (1000, 1000);
+		m_stageClearText.SetPosition ();
 	}
 
 	// ステージクリアのアップデート.
 	void UpdateStageClear () {
 		if (Input.GetKeyDown (KeyCode.Return)) {
 			// ステージ切り替え.
-			cStageClearText.HideText ();
-			cRocket.NextStageInitialize ();
+			m_stageClearText.HideText ();
+			m_rocket.NextStageInitialize ();
+			m_camera.Initialize ();
 
-			Transit (eStatus.ePlay);
+			m_status = eStatus.ePlay;
+			m_time = 0;
 		}
 	}
 
 	// ゲームオーバーのスタート.
 	void StartGameOver () {
-		cRocket.Explosion ();
-		Destroy (cRocket.m_rocket);
-		Destroy (cRocket.m_propulsion);
+		m_rocket.Explosion ();
+		Destroy (m_rocket.m_rocket);
+		Destroy (m_rocket.m_propulsion);
+		m_firstClick = true;
 	}
 
 	// ゲームオーバーのアップデート.
 	void UpdateGameOver () {
-		if (Input.GetKeyDown (KeyCode.Return)) {
+		if (Input.GetKeyDown (KeyCode.Return) && m_firstClick) {
+			m_firstClick = false;
 			// シーン遷移.
 			SceneTransition.GetInstance ().TransScene (SceneTransition.eScene.eTitle);
 		}

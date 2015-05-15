@@ -9,16 +9,19 @@ public class Text : MonoBehaviour {
 		eFuel,
 		eGameOver,
 		eGameClear,
+		ePushEnter,
+		eTitle,
 	}
 
 	const int defaultWidth = 800;		// 横幅.
 	const int defaultHeight = 600;		// 縦幅.
 	const int parametersFontSize = 30;	// 垂直、平行のスピードと燃料のフォント.
 	const int resultFontSize = 60;
+	const int titleFontSize = 60;
 
 	public TextType m_text;
-	public Rocket cRocket;
-	public GUIText cText;
+	public Rocket m_rocket;
+	public GUIText m_guiText;
 	Vector2 m_screenSize;
 	
 	// Use this for initialization
@@ -33,25 +36,25 @@ public class Text : MonoBehaviour {
 			UpdateFontSize ();
 		}
 
-		if (cRocket == null) {
+		if (m_rocket == null) {
 			return;
 		}
 
 		switch (m_text) {
 		case TextType.eHorizontalSpeed:
-			UpdateText ((int)cRocket.m_horizontalSpeed, "HorizontalSpeed：");
+			UpdateText ((int)m_rocket.m_horizontalSpeed, "HorizontalSpeed：");
 			break;
 		case TextType.eVerticalSpeed:
-			UpdateText ((int)cRocket.m_verticalSpeed, "VerticalSpeed：");
+			UpdateText ((int)m_rocket.m_verticalSpeed, "VerticalSpeed：");
 			break;
 		case TextType.eFuel:
-			cText.text = "Fuel：" + cRocket.m_fuel.ToString ();
+			m_guiText.text = "Fuel：" + m_rocket.m_fuel.ToString ();
 			break;
 		case TextType.eGameClear:
-			cText.text = "STAGE CLEAR";
+			m_guiText.text = "STAGE CLEAR";
 			break;
 		case TextType.eGameOver:
-			cText.text = "GAME OVER";
+			m_guiText.text = "GAME OVER";
 			break;
 		}
 	}
@@ -85,7 +88,7 @@ public class Text : MonoBehaviour {
 	// スピードの符号を反転して表示.
 	void UpdateText (int speed, string text) {
 		speed *= -1;
-		cText.text = text + speed.ToString ();
+		m_guiText.text = text + speed.ToString ();
 	}
 
 	// フォントサイズ更新.
@@ -94,11 +97,15 @@ public class Text : MonoBehaviour {
 		if (m_text == TextType.eGameClear || m_text == TextType.eGameOver) {
 			baseSize = resultFontSize;
 		}
+		if (m_text == TextType.ePushEnter || m_text == TextType.eTitle) {
+			baseSize = titleFontSize;
+		}
+
 		m_screenSize = new Vector2 (Screen.width, Screen.height);
 		float fontSize = baseSize * (m_screenSize.x / defaultWidth);
 		if(fontSize > baseSize * (m_screenSize.y / defaultHeight)) {
 			fontSize = baseSize * (m_screenSize.y / defaultHeight);
 		}
-		cText.fontSize = (int)fontSize;
+		m_guiText.fontSize = (int)fontSize;
 	}
 }

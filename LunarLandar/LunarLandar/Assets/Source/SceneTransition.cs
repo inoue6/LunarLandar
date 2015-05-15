@@ -2,11 +2,13 @@
 using System.Collections;
 
 public class SceneTransition : MonoBehaviour {
+	// シーン.
 	public enum eScene {
 		eTitle,
 		eGameMain,
 	};
-	
+
+	// 状態.
 	enum eStatus {
 		eFadeOut,
 		eTransScene,
@@ -14,11 +16,11 @@ public class SceneTransition : MonoBehaviour {
 		eNothingIsDone,
 	};
 	
-	private static SceneTransition m_instance;
+	private static SceneTransition s_instance;
 	eStatus m_status = eStatus.eNothingIsDone;
 	eScene m_nextScene;
 	public Color m_fadeColor;
-	float time;
+	float m_time;
 	
 	// Use this for initialization
 	void Start () {
@@ -43,6 +45,7 @@ public class SceneTransition : MonoBehaviour {
 		}
 	}
 
+	// シーン切り替え.
 	void Transit (eStatus nextStatus) {
 		switch (nextStatus) {
 		case eStatus.eNothingIsDone:
@@ -59,16 +62,18 @@ public class SceneTransition : MonoBehaviour {
 			break;
 		}
 	}
-	
+
+	// インスタンスの取得.
 	public static SceneTransition GetInstance () {
-		if (m_instance == null) {
+		if (s_instance == null) {
 			GameObject gameObject = new GameObject ("SceneTransition");
-			m_instance = gameObject.AddComponent<SceneTransition> ();
+			s_instance = gameObject.AddComponent<SceneTransition> ();
 		}
 		
-		return m_instance;
+		return s_instance;
 	}
-	
+
+	// 切り替え先のシーンをセット.
 	public void TransScene (eScene nextScene) {
 		m_nextScene = nextScene;
 		Transit (eStatus.eFadeOut);
@@ -96,14 +101,14 @@ public class SceneTransition : MonoBehaviour {
 	// フェードアウトのスタート.
 	void StartFadeOut () {
 		m_status = eStatus.eFadeOut;
-		time = 0;
+		m_time = 0;
 	}
 	
 	// フェードアウトのアップデート.
 	void UpdateFadeOut () {
-		if (time <= 1) {
-			m_fadeColor.a = Mathf.Lerp (0, 1, time / 1);
-			time += Time.deltaTime;
+		if (m_time <= 1) {
+			m_fadeColor.a = Mathf.Lerp (0, 1, m_time / 1);
+			m_time += Time.deltaTime;
 		}
 		else {
 			Transit (eStatus.eTransScene);
@@ -113,14 +118,14 @@ public class SceneTransition : MonoBehaviour {
 	// フェードインのスタート.
 	void StartFadeIn () {
 		m_status = eStatus.eFadeIn;
-		time = 0;
+		m_time = 0;
 	}
 	
 	// フェードインのアップデート.
 	void UpdateFadeIn () {
-		if (time <= 1) {
-			m_fadeColor.a = Mathf.Lerp (1, 0, time / 1);
-			time += Time.deltaTime;
+		if (m_time <= 1) {
+			m_fadeColor.a = Mathf.Lerp (1, 0, m_time / 1);
+			m_time += Time.deltaTime;
 		}
 		else {
 			Transit (eStatus.eNothingIsDone);
@@ -128,6 +133,7 @@ public class SceneTransition : MonoBehaviour {
 		}
 	}
 
+	// フェードイン、アウト用のテクスチャーの作成.
 	public void OnGUI () {
 		GUI.color = this.m_fadeColor;
 		GUI.DrawTexture (new Rect (0, 0, Screen.width, Screen.height), Texture2D.whiteTexture);

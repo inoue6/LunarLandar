@@ -9,8 +9,7 @@ public class CameraControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		m_position = new Vector3 (0, 0, -8.68f);
-		transform.position = m_position;
+		Initialize ();
 	}
 	
 	// Update is called once per frame
@@ -18,6 +17,12 @@ public class CameraControl : MonoBehaviour {
 		MoveCamera ();
 		transform.position = m_position;
 		m_backGround.transform.position = m_rocket.m_position;
+	}
+
+	// 初期化.
+	public void Initialize () {
+		m_position = new Vector3 (0, 0, -8.68f);
+		transform.position = m_position;
 	}
 
 	// 移動.
