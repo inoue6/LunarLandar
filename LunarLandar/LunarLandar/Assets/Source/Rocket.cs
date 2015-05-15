@@ -57,7 +57,7 @@ public class Rocket : MonoBehaviour {
 	// ステージ移動時の初期化.
 	public void NextStageInitialize () {
 		transform.up = new Vector2 (-1, 0);
-		m_position.x = m_setPosition[Random.Range (0, positionNum+1)].x;
+		m_position.x = m_setPosition[Random.Range (0, positionNum)].x;
 		m_position.y = 0.0f;
 		m_horizontalSpeed = -400.0f;
 		m_verticalSpeed = 0.0f;
