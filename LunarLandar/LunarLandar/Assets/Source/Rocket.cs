@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class Rocket : MonoBehaviour {
+	const int positionNum = 8;
+
 	public GameObject m_rocket;			// ロケット.
 	public GameObject m_propulsion;		// 推進装置の炎.
 	public GameObject m_explosion;		// 爆発.
@@ -13,6 +15,9 @@ public class Rocket : MonoBehaviour {
 	public bool m_propulsionFlag;		// 推進装置使用中.
 	public bool m_landing;				// 着地成功.
 	public bool m_forcedLanding;		// 着地失敗.
+	public int m_stageReachingNum;		// ステージ到達数.
+
+	public Vector2[] m_setPosition = new Vector2[positionNum];
 
 	// 後に押したキーを優先させる時に使う.
 	public bool m_downKeyLeft;
@@ -20,7 +25,9 @@ public class Rocket : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
+		for (int i = 0; i < positionNum; i++) {
+			m_setPosition[i] = new Vector2 (-14 + i*4, 0);
+		}
 	}
 	
 	// Update is called once per frame
@@ -30,7 +37,7 @@ public class Rocket : MonoBehaviour {
 
 	// 初期化.
 	public void Initialize () {
-		m_position.x = -4.0f;
+		m_position.x = m_setPosition[Random.Range (0, positionNum)].x;
 		m_position.y = 0.0f;
 		m_horizontalSpeed = -400.0f;
 		m_verticalSpeed = 0.0f;
@@ -43,11 +50,14 @@ public class Rocket : MonoBehaviour {
 		m_forcedLanding = false;
 
 		m_rocket.transform.position = m_position;
+
+		m_stageReachingNum++;
 	}
 
+	// ステージ移動時の初期化.
 	public void NextStageInitialize () {
 		transform.up = new Vector2 (-1, 0);
-		m_position.x = -4.0f;
+		m_position.x = m_setPosition[Random.Range (0, positionNum+1)].x;
 		m_position.y = 0.0f;
 		m_horizontalSpeed = -400.0f;
 		m_verticalSpeed = 0.0f;
@@ -59,6 +69,8 @@ public class Rocket : MonoBehaviour {
 		m_forcedLanding = false;
 		
 		m_rocket.transform.position = m_position;
+
+		m_stageReachingNum++;
 	}
 
 	// 推進装置.

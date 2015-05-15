@@ -19,6 +19,7 @@ public class StatusManager : MonoBehaviour {
 	public Text m_verticalSpeedText;
 	public Text m_fuelText;
 	public Text m_stageClearText;
+	public Text m_stageReachingNumText;
 	public int m_enterCount;
 	float m_time;
 	bool m_firstClick;
@@ -95,6 +96,7 @@ public class StatusManager : MonoBehaviour {
 		m_horizonSpeedText.SetPosition ();
 		m_verticalSpeedText.SetPosition ();
 		m_fuelText.SetPosition ();
+		m_stageReachingNumText.SetPosition ();
 		m_time = 0;
 	}
 

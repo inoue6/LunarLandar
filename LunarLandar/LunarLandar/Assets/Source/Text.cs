@@ -7,8 +7,9 @@ public class Text : MonoBehaviour {
 		eHorizontalSpeed,
 		eVerticalSpeed,
 		eFuel,
+		eStageReachingNum,
 		eGameOver,
-		eGameClear,
+		eStageClear,
 		ePushEnter,
 		eTitle,
 	}
@@ -50,11 +51,14 @@ public class Text : MonoBehaviour {
 		case TextType.eFuel:
 			m_guiText.text = "Fuel：" + m_rocket.m_fuel.ToString ();
 			break;
-		case TextType.eGameClear:
+		case TextType.eStageClear:
 			m_guiText.text = "STAGE CLEAR";
 			break;
 		case TextType.eGameOver:
 			m_guiText.text = "GAME OVER";
+			break;
+		case TextType.eStageReachingNum:
+			m_guiText.text = "Stage" + m_rocket.m_stageReachingNum.ToString ();
 			break;
 		}
 	}
@@ -71,11 +75,14 @@ public class Text : MonoBehaviour {
 		case TextType.eFuel:
 			transform.position = new Vector2 (0.762f, 0.81f);
 			break;
-		case TextType.eGameClear:
+		case TextType.eStageClear:
 			transform.position = new Vector2 (0.25f, 0.6f);
 			break;
 		case TextType.eGameOver:
 			transform.position = new Vector2 (0.28f, 0.6f);
+			break;
+		case TextType.eStageReachingNum:
+			transform.position = new Vector2 (0.05f, 0.95f);
 			break;
 		}
 	}
@@ -94,7 +101,7 @@ public class Text : MonoBehaviour {
 	// フォントサイズ更新.
 	void UpdateFontSize () {
 		int baseSize = parametersFontSize;
-		if (m_text == TextType.eGameClear || m_text == TextType.eGameOver) {
+		if (m_text == TextType.eStageClear || m_text == TextType.eGameOver) {
 			baseSize = resultFontSize;
 		}
 		if (m_text == TextType.ePushEnter || m_text == TextType.eTitle) {
