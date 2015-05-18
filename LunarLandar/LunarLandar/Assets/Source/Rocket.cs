@@ -31,7 +31,6 @@ public class Rocket : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		SetTextColor ();
 	}
 
 	// 初期化.
@@ -102,13 +101,6 @@ public class Rocket : MonoBehaviour {
 			return true;
 		}
 		return false;
-	}
-
-	public void SetTextColor(){
-		/*
-		Text text = gameObject.AddComponent<Text> ();
-		text.CheckClear (m_horizontalSpeed, m_verticalSpeed);
-		*/
 	}
 
 	void OnTriggerEnter2D (Collider2D collider) {

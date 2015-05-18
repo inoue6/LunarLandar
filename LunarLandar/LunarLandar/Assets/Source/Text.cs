@@ -14,6 +14,11 @@ public class Text : MonoBehaviour {
 		eTitle,
 	}
 
+	// 定数
+	public static readonly Color TEXT_RED = new Color (1.0f, 0.0f, 0.0f);		// テキストカラー赤
+	public static readonly Color TEXT_GREEN = new Color (0.0f, 1.0f, 0.0f);		// テキストカラー緑
+
+
 	const int defaultWidth = 800;		// 横幅.
 	const int defaultHeight = 600;		// 縦幅.
 	const int parametersFontSize = 30;	// 垂直、平行のスピードと燃料のフォント.
@@ -61,6 +66,8 @@ public class Text : MonoBehaviour {
 			m_guiText.text = "Stage" + m_rocket.m_stageReachingNum.ToString ();
 			break;
 		}
+
+		CheckClear (m_rocket.m_horizontalSpeed,m_rocket.m_verticalSpeed,m_rocket.m_fuel);
 	}
 
 	// 座標の指定.
@@ -87,18 +94,28 @@ public class Text : MonoBehaviour {
 		}
 	}
 
-	public void CheckClear(float m_horizontalSpeed, float m_verticalSpeed){
+	// 着陸条件を満たした場合テキストの色を緑へ
+	// それ以外は赤色に設定する関数
+	public void CheckClear(float m_horizontalSpeed, float m_verticalSpeed, float m_fuel){
 		if ((int)m_horizontalSpeed >= -100 && (int)m_horizontalSpeed <= 100) {
-			SetColor ("HorizontalSpeedText", new Color (0.0f, 1.0f, 0.0f));
+			SetColor ("HorizontalSpeedText", TEXT_GREEN);
 		}
 		else {
-			SetColor ("HorizontalSpeedText", new Color (1.0f, 0.0f, 0.0f));
+			SetColor ("HorizontalSpeedText", TEXT_RED);
 		}
-		if ((int)m_verticalSpeed >= -100 && (int)m_verticalSpeed <= 100) {
-			SetColor ("VerticalSpeedText", new Color (0.0f, 1.0f, 0.0f));
+
+		if ((int)m_verticalSpeed >= 0 && (int)m_verticalSpeed <= 100) {
+			SetColor ("VerticalSpeedText", TEXT_GREEN);
 		}
 		else {
-			SetColor ("VerticalSpeedText", new Color (1.0f, 0.0f, 0.0f));
+			SetColor ("VerticalSpeedText", TEXT_RED);
+		}
+
+		if ((int)m_fuel > 0) {
+			SetColor ("FuelText", TEXT_GREEN);
+		}
+		else {
+			SetColor ("FuelText", TEXT_RED);
 		}
 	}
 
