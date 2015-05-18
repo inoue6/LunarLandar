@@ -24,7 +24,7 @@ public class Text : MonoBehaviour {
 	public Rocket m_rocket;
 	public GUIText m_guiText;
 	Vector2 m_screenSize;
-	
+
 	// Use this for initialization
 	void Start () {
 		m_screenSize = new Vector2 (defaultWidth, defaultHeight);
@@ -85,6 +85,27 @@ public class Text : MonoBehaviour {
 			transform.position = new Vector2 (0.05f, 0.95f);
 			break;
 		}
+	}
+
+	public void CheckClear(float m_horizontalSpeed, float m_verticalSpeed){
+		if ((int)m_horizontalSpeed >= -100 && (int)m_horizontalSpeed <= 100) {
+			SetColor ("HorizontalSpeedText", new Color (0.0f, 1.0f, 0.0f));
+		}
+		else {
+			SetColor ("HorizontalSpeedText", new Color (1.0f, 0.0f, 0.0f));
+		}
+		if ((int)m_verticalSpeed >= -100 && (int)m_verticalSpeed <= 100) {
+			SetColor ("VerticalSpeedText", new Color (0.0f, 1.0f, 0.0f));
+		}
+		else {
+			SetColor ("VerticalSpeedText", new Color (1.0f, 0.0f, 0.0f));
+		}
+	}
+
+	// テキストを指定した色に変更する関数
+	public void SetColor(string textName,Color color){
+		GUIText text = GameObject.Find (textName).GetComponent<GUIText>();
+		text.color = color;
 	}
 
 	// 非表示.

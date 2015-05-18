@@ -18,7 +18,6 @@ public class Rocket : MonoBehaviour {
 	public int m_stageReachingNum;		// ステージ到達数.
 
 	public Vector2[] m_setPosition = new Vector2[positionNum];
-
 	// 後に押したキーを優先させる時に使う.
 	public bool m_downKeyLeft;
 	public bool m_downKeyRight;
@@ -32,7 +31,7 @@ public class Rocket : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+		SetTextColor ();
 	}
 
 	// 初期化.
@@ -103,6 +102,13 @@ public class Rocket : MonoBehaviour {
 			return true;
 		}
 		return false;
+	}
+
+	public void SetTextColor(){
+		/*
+		Text text = gameObject.AddComponent<Text> ();
+		text.CheckClear (m_horizontalSpeed, m_verticalSpeed);
+		*/
 	}
 
 	void OnTriggerEnter2D (Collider2D collider) {
