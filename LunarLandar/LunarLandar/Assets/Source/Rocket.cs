@@ -108,10 +108,18 @@ public class Rocket : MonoBehaviour {
 	public bool CheckClear () {
 		if (((int)m_horizontalSpeed >= -100 && (int)m_horizontalSpeed <= 100) &&
 			((int)m_verticalSpeed >= -100 && (int)m_verticalSpeed <= 100) && 
-		    (transform.up.x == 0 && transform.up.y == 1)) {
+		    CheckRotationAngle()) {
 			return true;
 		}
 		return false;
+	}
+
+	// ロケットの傾きが着陸可能な範囲内かチェックする関数
+	public bool CheckRotationAngle(){
+		if(m_rotationAngle >= 5 || m_rotationAngle <= -5){
+			return false;
+		}
+		return true;
 	}
 
 	void OnTriggerEnter2D (Collider2D collider) {

@@ -77,7 +77,7 @@ public class Text : MonoBehaviour {
 		CheckClear (m_rocket.m_horizontalSpeed,m_rocket.m_verticalSpeed,m_rocket.m_fuel);
 
 		// ロケットの傾きから着陸可能かどうかテキストに反映する
-		if (m_rocket.m_rotationAngle==0) {
+		if (m_rocket.CheckRotationAngle()) {
 			SetColor ("DegreeText", TEXT_GREEN);
 			decision = "OK";
 		}
