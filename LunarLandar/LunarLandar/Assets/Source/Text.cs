@@ -12,6 +12,7 @@ public class Text : MonoBehaviour {
 		eStageClear,
 		ePushEnter,
 		eTitle,
+		eDegree,
 	}
 
 	// 定数
@@ -30,9 +31,12 @@ public class Text : MonoBehaviour {
 	public GUIText m_guiText;
 	Vector2 m_screenSize;
 
+	public string decision;
+
 	// Use this for initialization
 	void Start () {
 		m_screenSize = new Vector2 (defaultWidth, defaultHeight);
+		decision = "NG";
 	}
 	
 	// Update is called once per frame
@@ -65,9 +69,23 @@ public class Text : MonoBehaviour {
 		case TextType.eStageReachingNum:
 			m_guiText.text = "Stage" + m_rocket.m_stageReachingNum.ToString ();
 			break;
+		case TextType.eDegree:
+			m_guiText.text = "Degree："+decision.ToString();
+			break;
 		}
 
 		CheckClear (m_rocket.m_horizontalSpeed,m_rocket.m_verticalSpeed,m_rocket.m_fuel);
+
+		// ロケットの傾きから着陸可能かどうかテキストに反映する
+		if (m_rocket.m_rotationAngle==0) {
+			SetColor ("DegreeText", TEXT_GREEN);
+			decision = "OK";
+		}
+		else{
+			SetColor ("DegreeText", TEXT_RED);
+			decision = "NG";
+		}
+	
 	}
 
 	// 座標の指定.
@@ -90,6 +108,9 @@ public class Text : MonoBehaviour {
 			break;
 		case TextType.eStageReachingNum:
 			transform.position = new Vector2 (0.05f, 0.95f);
+			break;
+		case TextType.eDegree:
+			transform.position = new Vector2(0.715f,0.75f);
 			break;
 		}
 	}

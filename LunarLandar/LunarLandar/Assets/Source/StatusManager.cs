@@ -20,6 +20,7 @@ public class StatusManager : MonoBehaviour {
 	public Text m_fuelText;
 	public Text m_stageClearText;
 	public Text m_stageReachingNumText;
+	public Text m_degreeText;
 	public int m_enterCount;
 	float m_time;
 	bool m_firstClick;
@@ -97,6 +98,9 @@ public class StatusManager : MonoBehaviour {
 		m_verticalSpeedText.SetPosition ();
 		m_fuelText.SetPosition ();
 		m_stageReachingNumText.SetPosition ();
+
+		m_degreeText = GameObject.Find ("DegreeText").GetComponent<Text>();
+		m_degreeText.SetPosition ();
 		m_time = 0;
 	}
 

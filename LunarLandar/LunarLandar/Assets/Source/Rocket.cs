@@ -17,6 +17,8 @@ public class Rocket : MonoBehaviour {
 	public bool m_forcedLanding;		// 着地失敗.
 	public int m_stageReachingNum;		// ステージ到達数.
 
+	public int m_rotationAngle;			// 回転角度
+
 	public Vector2[] m_setPosition = new Vector2[positionNum];
 	// 後に押したキーを優先させる時に使う.
 	public bool m_downKeyLeft;
@@ -47,6 +49,8 @@ public class Rocket : MonoBehaviour {
 		m_landing = false;
 		m_forcedLanding = false;
 
+		m_rotationAngle = 90;
+
 		m_rocket.transform.position = m_position;
 
 		m_stageReachingNum++;
@@ -65,7 +69,9 @@ public class Rocket : MonoBehaviour {
 		m_downKeyRight = false;
 		m_landing = false;
 		m_forcedLanding = false;
-		
+
+		m_rotationAngle = 90;
+
 		m_rocket.transform.position = m_position;
 
 		m_stageReachingNum++;
@@ -86,6 +92,11 @@ public class Rocket : MonoBehaviour {
 	public void Rotate () {
 		m_rocket.transform.Rotate (new Vector3 (0, 0, 1) * m_rotate);
 		m_rotate = 0.0f;
+
+		// 回転角度がロケットが垂直であるのを基準として一回転した時、角度が超えないようにする
+		if (m_rotationAngle >= 360 || m_rotationAngle <= -360) {
+			m_rotationAngle=0;
+		}
 	}
 
 	// 垂直にする.
@@ -147,6 +158,7 @@ public class Rocket : MonoBehaviour {
 			m_rotate = 1.0f;
 			m_downKeyLeft = true;
 			m_downKeyRight = false;
+			m_rotationAngle+=1;
 		}
 		if (Input.GetKeyUp (KeyCode.LeftArrow)) {
 			m_downKeyLeft = false;
@@ -157,6 +169,7 @@ public class Rocket : MonoBehaviour {
 			m_rotate = -1.0f;
 			m_downKeyLeft = false;
 			m_downKeyRight = true;
+			m_rotationAngle -=1;
 		}
 		if (Input.GetKeyUp (KeyCode.RightArrow)) {
 			m_downKeyRight = false;
@@ -165,6 +178,7 @@ public class Rocket : MonoBehaviour {
 		// 着地場所と垂直に.
 		if(Input.GetKeyDown (KeyCode.UpArrow)) {
 			Vertical ();
+			m_rotationAngle = 0;
 		}
 	}
 	
