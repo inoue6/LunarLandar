@@ -14,6 +14,7 @@ public class Text : MonoBehaviour {
 		eTitle,
 		eDegree,
 		eMissLanding,
+		eScore,
 	}
 
 	// 定数
@@ -33,6 +34,8 @@ public class Text : MonoBehaviour {
 	Vector2 m_screenSize;
 
 	public string decision;
+
+	public Score m_score;
 
 	// Use this for initialization
 	void Start () {
@@ -76,6 +79,9 @@ public class Text : MonoBehaviour {
 		case TextType.eMissLanding:
 			SetMissLandingText();
 			break;
+		case TextType.eScore:
+			m_guiText.text = "Score："+m_score.score.ToString();
+			break;
 		}
 
 		ChangeTextColor (m_rocket.m_horizontalSpeed,m_rocket.m_verticalSpeed,m_rocket.m_fuel);
@@ -107,6 +113,9 @@ public class Text : MonoBehaviour {
 			break;
 		case TextType.eMissLanding:
 			transform.position = new Vector2(0.58f,0.685f);
+			break;
+		case TextType.eScore:
+			transform.position = new Vector2 (0.05f, 0.88f);
 			break;
 		}
 	}

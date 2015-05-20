@@ -15,6 +15,7 @@ public class StatusManager : MonoBehaviour {
 	public GameObject m_description2;
 	public Rocket m_rocket;
 	public CameraControl m_camera;
+	public Score m_score;
 	public Text m_horizonSpeedText;
 	public Text m_verticalSpeedText;
 	public Text m_fuelText;
@@ -22,6 +23,7 @@ public class StatusManager : MonoBehaviour {
 	public Text m_stageReachingNumText;
 	public Text m_degreeText;
 	public Text m_missLandingText;
+	public Text m_scoreText;
 	public int m_enterCount;
 	float m_time;
 	bool m_firstClick;
@@ -94,25 +96,30 @@ public class StatusManager : MonoBehaviour {
 	// ゲームのスタート.
 	void StartPlay () {
 		m_rocket.Initialize ();
+		m_score.Initialize ();
 
 		m_horizonSpeedText.SetPosition ();
 		m_verticalSpeedText.SetPosition ();
 		m_fuelText.SetPosition ();
 		m_stageReachingNumText.SetPosition ();
-
-		m_degreeText = GameObject.Find ("DegreeText").GetComponent<Text>();
-		m_degreeText.SetPosition ();
-		m_missLandingText = GameObject.Find ("MissLandingText").GetComponent<Text>();
+		m_degreeText.SetPosition ();;
 		m_missLandingText.SetPosition ();
+		m_scoreText.SetPosition ();
+		
 		m_time = 0;
 	}
 
 	// ゲームのアップデート.
 	void UpdatePlay () {
+		/*
 		if (m_time < 0.1f) {
 			m_time += Time.deltaTime;
 			return;
-		}
+		}*/
+
+		// ゲームプレイ時間の計測
+		m_time += Time.deltaTime;
+		m_score.SetTime (m_time);
 
 		if (m_rocket.m_fuel > 0) {
 			// ロケット操作.
@@ -131,6 +138,8 @@ public class StatusManager : MonoBehaviour {
 
 		if (m_rocket.m_landing) {
 			if(m_rocket.CheckClear ()) {
+				// スコアの計算
+				m_score.ComputeScore();
 				// 着地成功.
 				Transit (eStatus.eStageClear);
 			}
