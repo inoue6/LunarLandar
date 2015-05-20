@@ -13,6 +13,7 @@ public class Text : MonoBehaviour {
 		ePushEnter,
 		eTitle,
 		eDegree,
+		eMissLanding,
 	}
 
 	// 定数
@@ -72,20 +73,12 @@ public class Text : MonoBehaviour {
 		case TextType.eDegree:
 			m_guiText.text = "Degree："+decision.ToString();
 			break;
+		case TextType.eMissLanding:
+			SetMissLandingText();
+			break;
 		}
 
-		CheckClear (m_rocket.m_horizontalSpeed,m_rocket.m_verticalSpeed,m_rocket.m_fuel);
-
-		// ロケットの傾きから着陸可能かどうかテキストに反映する
-		if (m_rocket.CheckRotationAngle()) {
-			SetColor ("DegreeText", TEXT_GREEN);
-			decision = "OK";
-		}
-		else{
-			SetColor ("DegreeText", TEXT_RED);
-			decision = "NG";
-		}
-	
+		ChangeTextColor (m_rocket.m_horizontalSpeed,m_rocket.m_verticalSpeed,m_rocket.m_fuel);
 	}
 
 	// 座標の指定.
@@ -112,38 +105,59 @@ public class Text : MonoBehaviour {
 		case TextType.eDegree:
 			transform.position = new Vector2(0.715f,0.75f);
 			break;
+		case TextType.eMissLanding:
+			transform.position = new Vector2(0.58f,0.685f);
+			break;
 		}
 	}
 
 	// 着陸条件を満たした場合テキストの色を緑へ
 	// それ以外は赤色に設定する関数
-	public void CheckClear(float m_horizontalSpeed, float m_verticalSpeed, float m_fuel){
+	public void ChangeTextColor(float m_horizontalSpeed, float m_verticalSpeed, float m_fuel){
 		if ((int)m_horizontalSpeed >= -100 && (int)m_horizontalSpeed <= 100) {
-			SetColor ("HorizontalSpeedText", TEXT_GREEN);
+			SetTextColor ("HorizontalSpeedText", TEXT_GREEN);
 		}
 		else {
-			SetColor ("HorizontalSpeedText", TEXT_RED);
+			SetTextColor ("HorizontalSpeedText", TEXT_RED);
 		}
 
 		if ((int)m_verticalSpeed >= 0 && (int)m_verticalSpeed <= 100) {
-			SetColor ("VerticalSpeedText", TEXT_GREEN);
+			SetTextColor ("VerticalSpeedText", TEXT_GREEN);
 		}
 		else {
-			SetColor ("VerticalSpeedText", TEXT_RED);
+			SetTextColor ("VerticalSpeedText", TEXT_RED);
 		}
 
 		if ((int)m_fuel > 0) {
-			SetColor ("FuelText", TEXT_GREEN);
+			SetTextColor ("FuelText", TEXT_GREEN);
 		}
 		else {
-			SetColor ("FuelText", TEXT_RED);
+			SetTextColor ("FuelText", TEXT_RED);
+		}
+
+		// ロケットの傾きから着陸可能かどうかテキストに反映する
+		if (m_rocket.CheckRotationAngle()) {
+			SetTextColor ("DegreeText", TEXT_GREEN);
+			decision = "OK";
+		}
+		else{
+			SetTextColor ("DegreeText", TEXT_RED);
+			decision = "NG";
 		}
 	}
 
 	// テキストを指定した色に変更する関数
-	public void SetColor(string textName,Color color){
+	public void SetTextColor(string textName,Color color){
 		GUIText text = GameObject.Find (textName).GetComponent<GUIText>();
 		text.color = color;
+	}
+	
+	// 両足で着地が出来ていないことを表示させる関数
+	public void SetMissLandingText(){
+		if (!m_rocket.m_landing && m_rocket.m_forcedLanding)
+			m_guiText.text = "can't land by both feet";
+		else
+			m_guiText.text = "";
 	}
 
 	// 非表示.

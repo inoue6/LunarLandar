@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Rocket : MonoBehaviour {
 	const int positionNum = 8;
+	const int MaxFuel = 1000;			// 燃料の最大値
 
 	public GameObject m_rocket;			// ロケット.
 	public GameObject m_propulsion;		// 推進装置の炎.
@@ -43,7 +44,7 @@ public class Rocket : MonoBehaviour {
 		m_verticalSpeed = 0.0f;
 		m_rotate = 0.0f;
 		m_rocket.transform.Rotate (new Vector3 (0, 0, 1) * 90);
-		m_fuel = 1000;
+		m_fuel = MaxFuel;
 		m_downKeyLeft = false;
 		m_downKeyRight = false;
 		m_landing = false;
@@ -65,6 +66,11 @@ public class Rocket : MonoBehaviour {
 		m_verticalSpeed = 0.0f;
 		m_rotate = 0.0f;
 		m_fuel += 400;
+		// 加算時に燃料の最大値を超えないようにする
+		if (m_fuel > MaxFuel) {
+			m_fuel = MaxFuel;
+		}
+
 		m_downKeyLeft = false;
 		m_downKeyRight = false;
 		m_landing = false;
@@ -104,10 +110,14 @@ public class Rocket : MonoBehaviour {
 		m_rocket.transform.up = new Vector2 (0, 1);
 	}
 
-	// 着地成功条件チェック.
+	// 着地成功条件チェック
 	public bool CheckClear () {
+		// m_verticalSpeedは表示時に符号を反転させて表示されているので
+		// テキストで確認する範囲判定のために反転しなおす
+		int verticalSpeed = -(int)m_verticalSpeed;
+
 		if (((int)m_horizontalSpeed >= -100 && (int)m_horizontalSpeed <= 100) &&
-			((int)m_verticalSpeed >= -100 && (int)m_verticalSpeed <= 100) && 
+		    (verticalSpeed >= -100 && verticalSpeed <= 0) && 
 		    CheckRotationAngle()) {
 			return true;
 		}
@@ -116,7 +126,7 @@ public class Rocket : MonoBehaviour {
 
 	// ロケットの傾きが着陸可能な範囲内かチェックする関数
 	public bool CheckRotationAngle(){
-		if(m_rotationAngle >= 5 || m_rotationAngle <= -5){
+		if(m_rotationAngle >= 3 || m_rotationAngle <= -3){
 			return false;
 		}
 		return true;

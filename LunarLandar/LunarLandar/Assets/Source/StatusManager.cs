@@ -21,6 +21,7 @@ public class StatusManager : MonoBehaviour {
 	public Text m_stageClearText;
 	public Text m_stageReachingNumText;
 	public Text m_degreeText;
+	public Text m_missLandingText;
 	public int m_enterCount;
 	float m_time;
 	bool m_firstClick;
@@ -101,6 +102,8 @@ public class StatusManager : MonoBehaviour {
 
 		m_degreeText = GameObject.Find ("DegreeText").GetComponent<Text>();
 		m_degreeText.SetPosition ();
+		m_missLandingText = GameObject.Find ("MissLandingText").GetComponent<Text>();
+		m_missLandingText.SetPosition ();
 		m_time = 0;
 	}
 
