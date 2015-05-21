@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+using System.Linq;
+using System;
+
 public class Rocket : MonoBehaviour {
 	const int positionNum = 8;
 	const int MaxFuel = 1000;			// 燃料の最大値
@@ -19,6 +22,10 @@ public class Rocket : MonoBehaviour {
 	public int m_stageReachingNum;		// ステージ到達数.
 
 	public int m_rotationAngle;			// 回転角度
+	
+	int m_nowStageNum;							// 現在のゲーム開始位置の番号
+	int[] m_StageNum = new int[positionNum];	// 開始位置をシャッフルして持つ配列
+	int m_subStageNum;							// m_StageNumの添え字
 
 	public Vector2[] m_setPosition = new Vector2[positionNum];
 	// 後に押したキーを優先させる時に使う.
@@ -38,7 +45,11 @@ public class Rocket : MonoBehaviour {
 
 	// 初期化.
 	public void Initialize () {
-		m_position.x = m_setPosition[Random.Range (0, positionNum)].x;
+		m_subStageNum = 0;
+		ShuffleNum ();
+		m_nowStageNum = m_StageNum [m_subStageNum];
+		m_subStageNum++;
+		m_position.x = m_setPosition[m_nowStageNum].x;
 		m_position.y = 0.0f;
 		m_horizontalSpeed = -400.0f;
 		m_verticalSpeed = 0.0f;
@@ -60,13 +71,15 @@ public class Rocket : MonoBehaviour {
 	// ステージ移動時の初期化.
 	public void NextStageInitialize () {
 		transform.up = new Vector2 (-1, 0);
-		m_position.x = m_setPosition[Random.Range (0, positionNum)].x;
+		SetStartPosNum ();
+		m_position.x = m_setPosition[m_nowStageNum].x;
 		m_position.y = 0.0f;
 		m_horizontalSpeed = -400.0f;
 		m_verticalSpeed = 0.0f;
 		m_rotate = 0.0f;
+
 		m_fuel += 400;
-		// 加算時に燃料の最大値を超えないようにする
+		// 燃料の補給時に最大値を超えないようにする
 		if (m_fuel > MaxFuel) {
 			m_fuel = MaxFuel;
 		}
@@ -81,6 +94,42 @@ public class Rocket : MonoBehaviour {
 		m_rocket.transform.position = m_position;
 
 		m_stageReachingNum++;
+	}
+
+	// ロケットの開始位置の番号をシャッフルして配列に格納しておく関数
+	public void ShuffleNum(){
+		// 指定した数値から指定の数分だけ配列を生成し その後中身をシャッフルする
+		// よりバラバラにするために前半と後半に分けてシャッフルをする
+		int[] data1 = Enumerable.Range (0, positionNum/2).ToArray ().OrderBy (i => Guid.NewGuid ()).ToArray ();
+		int[] data2 = Enumerable.Range (4, positionNum/2).ToArray ().OrderBy (i => Guid.NewGuid ()).ToArray ();
+
+		// 結合する(交互に格納)
+		for (int i=0; i<positionNum; i++) {
+			if(i%2==0){
+				m_StageNum[i]=data1[i/2];
+			}
+			else{
+				m_StageNum[i]=data2[i/2];
+			}
+		}
+	}
+
+	// 次の開始位置の番号を設定する関数
+	public void SetStartPosNum(){
+		// 次の開始位置が今の開始位置に近すぎる場合 次の値に変更する
+		while(m_subStageNum < positionNum &&
+		      System.Math.Abs (m_nowStageNum - m_StageNum [m_subStageNum]) <= 1){
+			m_subStageNum++;
+		}
+		
+		// 配列の中身をすべて見終わった時 シャッフルする
+		if (m_subStageNum >= positionNum) {
+			m_subStageNum=0;
+			ShuffleNum();
+		}
+
+		m_nowStageNum = m_StageNum [m_subStageNum];
+		m_subStageNum++;
 	}
 
 	// 推進装置.

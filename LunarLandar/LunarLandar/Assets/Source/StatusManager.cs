@@ -16,12 +16,14 @@ public class StatusManager : MonoBehaviour {
 	public Rocket m_rocket;
 	public CameraControl m_camera;
 	public Score m_score;
+	public Stage m_stageNow;
+	public Stage m_stageNext;
 	public Text m_horizonSpeedText;
 	public Text m_verticalSpeedText;
 	public Text m_fuelText;
 	public Text m_stageClearText;
 	public Text m_stageReachingNumText;
-	public Text m_degreeText;
+	public Text m_horizontalText;
 	public Text m_missLandingText;
 	public Text m_scoreText;
 	public int m_enterCount;
@@ -96,13 +98,15 @@ public class StatusManager : MonoBehaviour {
 	// ゲームのスタート.
 	void StartPlay () {
 		m_rocket.Initialize ();
+		m_stageNow.Initialize ();
+		m_stageNext.Initialize ();
 		m_score.Initialize ();
 
 		m_horizonSpeedText.SetPosition ();
 		m_verticalSpeedText.SetPosition ();
 		m_fuelText.SetPosition ();
 		m_stageReachingNumText.SetPosition ();
-		m_degreeText.SetPosition ();;
+		m_horizontalText.SetPosition ();;
 		m_missLandingText.SetPosition ();
 		m_scoreText.SetPosition ();
 		
@@ -111,11 +115,10 @@ public class StatusManager : MonoBehaviour {
 
 	// ゲームのアップデート.
 	void UpdatePlay () {
-		/*
-		if (m_time < 0.1f) {
-			m_time += Time.deltaTime;
-			return;
-		}*/
+		// ステージをセットする
+		m_stageNow.SetStage ();
+		m_stageNext.SetStage();
+
 
 		// ゲームプレイ時間の計測
 		m_time += Time.deltaTime;

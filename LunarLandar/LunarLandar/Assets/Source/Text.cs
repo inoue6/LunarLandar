@@ -12,7 +12,7 @@ public class Text : MonoBehaviour {
 		eStageClear,
 		ePushEnter,
 		eTitle,
-		eDegree,
+		eHorizontal,
 		eMissLanding,
 		eScore,
 	}
@@ -73,8 +73,8 @@ public class Text : MonoBehaviour {
 		case TextType.eStageReachingNum:
 			m_guiText.text = "Stage" + m_rocket.m_stageReachingNum.ToString ();
 			break;
-		case TextType.eDegree:
-			m_guiText.text = "Degree："+decision.ToString();
+		case TextType.eHorizontal:
+			m_guiText.text = "Horizontal："+decision.ToString();
 			break;
 		case TextType.eMissLanding:
 			SetMissLandingText();
@@ -97,7 +97,7 @@ public class Text : MonoBehaviour {
 			transform.position = new Vector2 (0.6f, 0.88f);
 			break;
 		case TextType.eFuel:
-			transform.position = new Vector2 (0.762f, 0.81f);
+			transform.position = new Vector2 (0.75f, 0.81f);
 			break;
 		case TextType.eStageClear:
 			transform.position = new Vector2 (0.25f, 0.6f);
@@ -108,8 +108,8 @@ public class Text : MonoBehaviour {
 		case TextType.eStageReachingNum:
 			transform.position = new Vector2 (0.05f, 0.95f);
 			break;
-		case TextType.eDegree:
-			transform.position = new Vector2(0.715f,0.75f);
+		case TextType.eHorizontal:
+			transform.position = new Vector2(0.66f,0.75f);
 			break;
 		case TextType.eMissLanding:
 			transform.position = new Vector2(0.58f,0.685f);
@@ -146,11 +146,11 @@ public class Text : MonoBehaviour {
 
 		// ロケットの傾きから着陸可能かどうかテキストに反映する
 		if (m_rocket.CheckRotationAngle()) {
-			SetTextColor ("DegreeText", TEXT_GREEN);
+			SetTextColor ("HorizontalText", TEXT_GREEN);
 			decision = "OK";
 		}
 		else{
-			SetTextColor ("DegreeText", TEXT_RED);
+			SetTextColor ("HorizontalText", TEXT_RED);
 			decision = "NG";
 		}
 	}
