@@ -4,7 +4,7 @@ using System.Collections;
 public class Landing : MonoBehaviour {
 	const int footNum = 2;	// 着陸時の足の最大本数.
 	public Rocket m_Rocket;
-	int m_count;				// 着陸時の足の本数.
+	public int m_count;				// 着陸時の足の本数.
 
 	// Use this for initialization
 	void Start () {
@@ -26,10 +26,11 @@ public class Landing : MonoBehaviour {
 		if (collider.CompareTag ("Landing")) {
 			m_count++;
 
-			if (m_count >= footNum) {
+			if ((m_count % footNum) == 0){
 				m_Rocket.m_landing = true;
 				m_Rocket.m_forcedLanding = false;
 			}
 		}
+	
 	}
 }
