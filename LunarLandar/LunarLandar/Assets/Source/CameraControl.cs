@@ -5,7 +5,7 @@ public class CameraControl : MonoBehaviour {
 	public Camera m_camera;
 	public Rocket m_rocket;
 	public Vector3 m_position;
-	public GameObject m_backGround;
+	//public GameObject m_backGround;
 
 	// Use this for initialization
 	void Start () {
@@ -16,7 +16,7 @@ public class CameraControl : MonoBehaviour {
 	void Update () {
 		MoveCamera ();
 		transform.position = m_position;
-		m_backGround.transform.position = m_rocket.m_position;
+		//m_backGround.transform.position = m_rocket.m_position;
 	}
 
 	// 初期化.

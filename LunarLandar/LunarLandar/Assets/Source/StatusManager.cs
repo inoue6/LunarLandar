@@ -15,6 +15,8 @@ public class StatusManager : MonoBehaviour {
 	public GameObject m_description2;
 	public Rocket m_rocket;
 	public CameraControl m_camera;
+	public BackGround m_backGround1;
+	public BackGround m_backGround2;
 	public Score m_score;
 	public Stage m_stageNow;
 	public Stage m_stageNext;
@@ -101,6 +103,8 @@ public class StatusManager : MonoBehaviour {
 		m_stageNow.Initialize ();
 		m_stageNext.Initialize ();
 		m_score.Initialize ();
+		m_backGround1.Initialize ();
+		m_backGround2.Initialize ();
 
 		m_horizonSpeedText.SetPosition ();
 		m_verticalSpeedText.SetPosition ();
@@ -119,6 +123,8 @@ public class StatusManager : MonoBehaviour {
 		m_stageNow.SetStage ();
 		m_stageNext.SetStage();
 
+		m_backGround1.SetBackGround ();
+		m_backGround2.SetBackGround ();
 
 		// ゲームプレイ時間の計測
 		m_time += Time.deltaTime;
@@ -169,6 +175,8 @@ public class StatusManager : MonoBehaviour {
 			// ステージ切り替え.
 			m_stageClearText.HideText ();
 			m_rocket.NextStageInitialize ();
+			m_backGround1.Initialize();
+			m_backGround2.Initialize();
 			m_camera.Initialize ();
 
 			m_status = eStatus.ePlay;
