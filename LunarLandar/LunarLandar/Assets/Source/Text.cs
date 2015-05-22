@@ -97,7 +97,7 @@ public class Text : MonoBehaviour {
 			transform.position = new Vector2 (0.6f, 0.88f);
 			break;
 		case TextType.eFuel:
-			transform.position = new Vector2 (0.75f, 0.81f);
+			transform.position = new Vector2 (0.76f, 0.81f);
 			break;
 		case TextType.eStageClear:
 			transform.position = new Vector2 (0.25f, 0.6f);
@@ -109,7 +109,7 @@ public class Text : MonoBehaviour {
 			transform.position = new Vector2 (0.05f, 0.95f);
 			break;
 		case TextType.eHorizontal:
-			transform.position = new Vector2(0.66f,0.75f);
+			transform.position = new Vector2(0.665f,0.75f);
 			break;
 		case TextType.eMissLanding:
 			transform.position = new Vector2(0.58f,0.685f);
