@@ -5,6 +5,7 @@ public class CameraControl : MonoBehaviour {
 	public Camera m_camera;
 	public Rocket m_rocket;
 	public Vector3 m_position;
+	public bool m_zoomIn;
 	//public GameObject m_backGround;
 
 	// Use this for initialization
@@ -23,6 +24,7 @@ public class CameraControl : MonoBehaviour {
 	public void Initialize () {
 		m_position = new Vector3 (0, 0, -8.68f);
 		transform.position = m_position;
+		m_zoomIn = false;
 	}
 
 	// 移動.
@@ -34,10 +36,12 @@ public class CameraControl : MonoBehaviour {
 	// 拡大.
 	public void ZoomInCamera () {
 		m_position.z = -6;
+		m_zoomIn = true;
 	}
 
 	// 縮小.
 	public void ZoomOutCamera () {
 		m_position.z = -8.68f;
+		m_zoomIn = false;
 	}
 }
