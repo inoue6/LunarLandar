@@ -15,6 +15,7 @@ public class StatusManager : MonoBehaviour {
 	public GameObject m_description2;
 	public Rocket m_rocket;
 	public CameraControl m_camera;
+	public FuelMeter m_fuelMeter;
 	public BackGround m_backGround1;
 	public BackGround m_backGround2;
 	public Score m_score;
@@ -113,6 +114,8 @@ public class StatusManager : MonoBehaviour {
 		m_horizontalText.SetPosition ();;
 		m_missLandingText.SetPosition ();
 		m_scoreText.SetPosition ();
+
+		m_fuelMeter.SetPosition ();
 		
 		m_time = 0;
 	}
@@ -161,6 +164,9 @@ public class StatusManager : MonoBehaviour {
 			// 着地失敗.
 			Transit (eStatus.eGameOver);
 		}
+
+		m_fuelMeter.SetPosition ();
+		m_fuelMeter.MeterColorChange ();
 	}
 
 	// ステージクリアのスタート.

@@ -20,8 +20,11 @@ public class Rocket : MonoBehaviour {
 	public bool m_landing;				// 着地成功.
 	public bool m_forcedLanding;		// 着地失敗.
 	public int m_stageReachingNum;		// ステージ到達数.
-
 	public int m_rotationAngle;			// 回転角度
+	public float m_time;
+	public int m_color;
+	public int m_green;
+	public int m_blue;
 	
 	int m_nowStageNum;							// 現在のゲーム開始位置の番号
 	int[] m_StageNum = new int[positionNum];	// 開始位置をシャッフルして持つ配列
@@ -66,6 +69,11 @@ public class Rocket : MonoBehaviour {
 		m_rocket.transform.position = m_position;
 
 		m_stageReachingNum++;
+
+		m_time = 0;
+		m_color = 255;
+		m_green = 255;
+		m_blue = 255;
 	}
 
 	// ステージ移動時の初期化.
@@ -94,6 +102,11 @@ public class Rocket : MonoBehaviour {
 		m_rocket.transform.position = m_position;
 
 		m_stageReachingNum++;
+
+		m_time = 0;
+		m_color = 255;
+		m_green = 255;
+		m_blue = 255;
 	}
 
 	// ロケットの開始位置の番号をシャッフルして配列に格納しておく関数
@@ -204,6 +217,8 @@ public class Rocket : MonoBehaviour {
 			m_propulsion.transform.position = m_rocket.transform.position;
 			m_propulsion.transform.rotation = m_rocket.transform.rotation;
 		}
+
+		RocketColorChange ();
 	}
 
 	// 操作関係.
@@ -252,5 +267,24 @@ public class Rocket : MonoBehaviour {
 	// 爆発.
 	public void Explosion () {
 		Instantiate (m_explosion, m_rocket.transform.position, Quaternion.identity);
+	}
+
+	public void RocketColorChange () {
+		m_time += Time.deltaTime;
+		SpriteRenderer spriteRenderer = m_rocket.GetComponent<SpriteRenderer> ();
+		if (m_fuel <= 300) {
+			if(m_fuel <= 0) {
+				spriteRenderer.color = Color.red;
+				return;
+			}
+			if(m_time >= 0.5f) {
+				m_color *= -1;
+				spriteRenderer.color = new Color (255, m_green + m_color, m_blue + m_color, 255);
+				m_time = 0;
+			}
+		}
+		else {
+			spriteRenderer.color = Color.white;
+		}
 	}
 }

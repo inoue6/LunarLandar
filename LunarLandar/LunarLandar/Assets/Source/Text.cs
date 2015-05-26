@@ -74,13 +74,13 @@ public class Text : MonoBehaviour {
 			m_guiText.text = "Stage" + m_rocket.m_stageReachingNum.ToString ();
 			break;
 		case TextType.eHorizontal:
-			m_guiText.text = "Horizontal："+decision.ToString();
+			m_guiText.text = "Horizontal：" + decision.ToString();
 			break;
 		case TextType.eMissLanding:
 			SetMissLandingText();
 			break;
 		case TextType.eScore:
-			m_guiText.text = "Score："+m_score.score.ToString();
+			m_guiText.text = "Score：" + m_score.score.ToString();
 			break;
 		}
 
