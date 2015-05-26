@@ -6,6 +6,11 @@ public class CameraControl : MonoBehaviour {
 	public Rocket m_rocket;
 	public Vector3 m_position;
 	public bool m_zoomIn;
+	int m_collisionCount;
+	public int collisionCount {
+		set { m_collisionCount = value; }
+		get { return this.m_collisionCount; }
+	}
 	//public GameObject m_backGround;
 
 	// Use this for initialization
