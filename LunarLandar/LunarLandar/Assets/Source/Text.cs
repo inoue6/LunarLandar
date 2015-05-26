@@ -15,6 +15,7 @@ public class Text : MonoBehaviour {
 		eHorizontal,
 		eMissLanding,
 		eScore,
+		eTime,
 	}
 
 	// 定数
@@ -36,6 +37,7 @@ public class Text : MonoBehaviour {
 	public string decision;
 
 	public Score m_score;
+	public Timer m_timer;
 
 	// Use this for initialization
 	void Start () {
@@ -82,6 +84,13 @@ public class Text : MonoBehaviour {
 		case TextType.eScore:
 			m_guiText.text = "Score：" + m_score.score.ToString();
 			break;
+		case TextType.eTime:
+			int second1 = m_timer.second / 10;
+			int second2 = m_timer.second % 10;
+			int miri1 = m_timer.miri / 10;
+			int miri2 = m_timer.miri % 10;
+			m_guiText.text = m_timer.minute + "：" + second1 + second2 + "：" + miri1 + miri2;
+			break;
 		}
 
 		ChangeTextColor (m_rocket.m_horizontalSpeed,m_rocket.m_verticalSpeed,m_rocket.m_fuel);
@@ -116,6 +125,9 @@ public class Text : MonoBehaviour {
 			break;
 		case TextType.eScore:
 			transform.position = new Vector2 (0.05f, 0.88f);
+			break;
+		case TextType.eTime:
+			transform.position = new Vector2 (0.3f, 0.95f);
 			break;
 		}
 	}

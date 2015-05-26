@@ -29,8 +29,9 @@ public class StatusManager : MonoBehaviour {
 	public Text m_horizontalText;
 	public Text m_missLandingText;
 	public Text m_scoreText;
+	public Text m_timeText;
 	public int m_enterCount;
-	float m_time;
+	public Timer m_timer;
 	bool m_firstClick;
 
 	// Use this for initialization
@@ -114,10 +115,11 @@ public class StatusManager : MonoBehaviour {
 		m_horizontalText.SetPosition ();;
 		m_missLandingText.SetPosition ();
 		m_scoreText.SetPosition ();
+		m_timeText.SetPosition ();
 
 		m_fuelMeter.SetPosition ();
 		
-		m_time = 0;
+		m_timer.time = 0;
 	}
 
 	// ゲームのアップデート.
@@ -130,8 +132,8 @@ public class StatusManager : MonoBehaviour {
 		m_backGround2.SetBackGround ();
 
 		// ゲームプレイ時間の計測
-		m_time += Time.deltaTime;
-		m_score.SetTime (m_time);
+		m_timer.time += Time.deltaTime;
+		m_score.SetTime (m_timer.time);
 
 		if (m_rocket.m_fuel > 0) {
 			// ロケット操作.
@@ -186,7 +188,7 @@ public class StatusManager : MonoBehaviour {
 			m_camera.Initialize ();
 
 			m_status = eStatus.ePlay;
-			m_time = 0;
+			m_timer.time = 0;
 		}
 	}
 
