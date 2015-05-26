@@ -181,6 +181,7 @@ public class Rocket : MonoBehaviour {
 		if (((int)m_horizontalSpeed >= -100 && (int)m_horizontalSpeed <= 100) &&
 		    (verticalSpeed >= -100 && verticalSpeed <= 0) && 
 		    CheckRotationAngle()) {
+			m_forcedLanding = false;
 			return true;
 		}
 		return false;
@@ -208,8 +209,8 @@ public class Rocket : MonoBehaviour {
 
 		// 座標更新.
 		m_verticalSpeed += 1f;
-		m_position.x -= Mathf.FloorToInt(m_horizontalSpeed) * 0.00004f;
-		m_position.y -= Mathf.FloorToInt(m_verticalSpeed) * 0.00004f;
+		m_position.x -= Mathf.FloorToInt(m_horizontalSpeed) * 0.00006f;
+		m_position.y -= Mathf.FloorToInt(m_verticalSpeed) * 0.00006f;
 		m_rocket.transform.position = m_position;
 
 		if (m_propulsionFlag) {
