@@ -3,8 +3,6 @@ using System.Collections;
 
 public class FuelMeter : MonoBehaviour {
 	public GameObject m_gauge;
-	public GameObject m_yellowGauge;
-	public GameObject m_RedGauge;
 	public GameObject m_meter;
 	public Rocket m_rocket;
 	public Camera m_camera;
@@ -20,6 +18,7 @@ public class FuelMeter : MonoBehaviour {
 
 	}
 
+	// ワールド座標、大きさ決め.
 	public void SetPosition () {
 		m_meter.transform.position = new Vector3 (m_camera.transform.position.x + 6.24f, m_camera.transform.position.y - 2.19f, 0);
 		
@@ -44,6 +43,7 @@ public class FuelMeter : MonoBehaviour {
 		m_gauge.transform.position = new Vector3 (position.x, position.y, position.z);
 	}
 
+	// 残燃料によりメーターの色を変更.
 	public void MeterColorChange () {
 		Renderer renderer = m_gauge.GetComponent<Renderer> ();
 		if (m_rocket.m_fuel > 500) {

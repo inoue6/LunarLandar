@@ -2,10 +2,10 @@
 using System.Collections;
 
 public class Timer : MonoBehaviour {
-	float m_time;
-	int m_minute;
-	int m_second;
-	int m_miri;
+	float m_time;	// 計測するタイマー.
+	int m_minute;	// 分.
+	int m_second;	// 秒.
+	int m_miri;		// ミリ秒.
 
 	public float time {
 		get { return this.m_time; }
@@ -48,6 +48,7 @@ public class Timer : MonoBehaviour {
 	
 	}
 
+	// 時間を計測.
 	public void Measurement () {
 		m_time += Time.deltaTime;
 	}

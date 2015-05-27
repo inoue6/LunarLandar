@@ -270,6 +270,7 @@ public class Rocket : MonoBehaviour {
 		Instantiate (m_explosion, m_rocket.transform.position, Quaternion.identity);
 	}
 
+	// ロケットの色を残燃料により変更.
 	public void RocketColorChange () {
 		m_time += Time.deltaTime;
 		SpriteRenderer spriteRenderer = m_rocket.GetComponent<SpriteRenderer> ();
