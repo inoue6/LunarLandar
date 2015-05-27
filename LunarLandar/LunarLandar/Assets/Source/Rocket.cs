@@ -148,7 +148,7 @@ public class Rocket : MonoBehaviour {
 	// 推進装置.
 	public void PropulsionSystem () {
 		m_horizontalSpeed -= m_rocket.transform.up.x * 3;
-		m_verticalSpeed -= m_rocket.transform.up.y * 3;
+		m_verticalSpeed -= m_rocket.transform.up.y * 6;
 		// 燃料消費.
 		if (m_fuel > 0) {
 			m_fuel -= 1;
@@ -208,7 +208,7 @@ public class Rocket : MonoBehaviour {
 		Rotate ();
 
 		// 座標更新.
-		m_verticalSpeed += 1f;
+		m_verticalSpeed += 2f;
 		m_position.x -= Mathf.FloorToInt(m_horizontalSpeed) * 0.00006f;
 		m_position.y -= Mathf.FloorToInt(m_verticalSpeed) * 0.00006f;
 		m_rocket.transform.position = m_position;
